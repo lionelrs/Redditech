@@ -1,6 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+
+import 'globals.dart';
 
 import 'LoginController.dart';
 import 'HomeController.dart';
@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget firstPage = LoginController(title: 'redd');
+    redditech = null;
     return MaterialApp(
       title: 'Redditech',
       theme: ThemeData(

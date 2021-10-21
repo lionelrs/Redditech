@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:draw/draw.dart';
+import 'package:flutter_application_1/Creditential_loader.dart';
+import 'package:flutter_application_1/globals.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 class LoginController extends StatefulWidget {
@@ -21,27 +23,39 @@ class LoginController extends StatefulWidget {
 }
 
 class _LoginControllerState extends State<LoginController> {
-  Reddit? _redditApi;
-
   void _accountConnexion() async {
     final userAgent = 'foobavegeaebaevrvvrvevvzvzr';
-    final reddit = Reddit.createInstalledFlowInstance(
-        userAgent: userAgent,
-        redirectUri: Uri.parse("antonin://fille"),
-        clientId: "N2MjyDzaWV2eKc9m9pGHbw");
+    final creditential = await loadCreditentials();
+    var reddit;
 
-    final authUrl = reddit.auth.url(['*'], userAgent, compactLogin: true);
-    try {
-      final result = await FlutterWebAuth.authenticate(
-          url: authUrl.toString(), callbackUrlScheme: "antonin");
+    if (creditential == "null") {
+      reddit = Reddit.createInstalledFlowInstance(
+          userAgent: userAgent,
+          redirectUri: Uri.parse("antonin://fille"),
+          clientId: "N2MjyDzaWV2eKc9m9pGHbw");
 
-      final code = Uri.parse(result).queryParameters['code'];
+      final authUrl = reddit.auth.url(['*'], userAgent, compactLogin: true);
 
-      await reddit.auth.authorize(code!);
-      _redditApi = reddit;
-    } catch (e) {
-      print("erreur");
+      try {
+        final result = await FlutterWebAuth.authenticate(
+          url: authUrl.toString(),
+          callbackUrlScheme: "antonin",
+        );
+
+        final code = Uri.parse(result).queryParameters['code'];
+
+        await reddit.auth.authorize(code!);
+        redditech = reddit;
+        saveCreditentials(reddit);
+      } catch (e) {
+        print("erreur");
+        return;
+      }
+    } else {
+      redditech = Reddit.restoreAuthenticatedInstance(creditential);
     }
+
+    print(reddit.user.me());
   }
 
 //   void _authentificate() {
