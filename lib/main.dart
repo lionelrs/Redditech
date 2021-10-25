@@ -1,46 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:draw/draw.dart';
+import 'package:flutter_application_1/ErrorScafold.dart';
 
 import 'globals.dart';
 
 import 'LoginController.dart';
 import 'HomeController.dart';
+import 'CreditentialLoader.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Widget firstPage = LoginController(title: 'redd');
-    redditech = null;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Redditech',
       theme: ThemeData(
-          fontFamily: 'verdana',
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: myColor,
-          ),
-          primaryTextTheme: TextTheme(
-              headline6: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'verdana-bold',
-                  fontSize: 20)),
-          textTheme: const TextTheme(
-            bodyText2: TextStyle(color: Colors.black),
-          )),
-      home: firstPage,
+        fontFamily: 'verdana',
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: myColor,
+        ),
+        primaryTextTheme: TextTheme(
+            headline6: TextStyle(
+                color: Colors.black, fontFamily: 'verdana-bold', fontSize: 20)),
+        textTheme: const TextTheme(
+          bodyText2: TextStyle(color: Colors.black),
+        ),
+      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => FutureBuilder(
+              future: isAuth(),
+              builder: (BuildContext context, AsyncSnapshot<Widget> widget) {
+                if (widget.connectionState == ConnectionState.done) {
+                  if (!widget.hasData) {
+                    return ErrorScafold();
+                  }
+                  return widget.data!;
+                } else {
+                  return ErrorScafold();
+                }
+              },
+            ),
+        '/home': (context) => HomeController(),
+        '/login': (context) => LoginController(title: 'red'),
+      },
     );
+  }
+}
+
+Future<Widget> isAuth() async {
+  final creditential = await loadCreditentials();
+
+  if (creditential == "null") {
+    return LoginController(title: "login");
+  } else {
+    redditech = Reddit.restoreAuthenticatedInstance(
+      creditential,
+      clientId: "N2MjyDzaWV2eKc9m9pGHbw",
+      userAgent: 'foobavegeaebaevrvvrvevvzvzr',
+    );
+    return HomeController();
   }
 }
 

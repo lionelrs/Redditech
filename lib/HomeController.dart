@@ -1,5 +1,11 @@
+import 'dart:developer';
+
+import 'commonWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:draw/draw.dart';
+import 'package:flutter_application_1/CreditentialLoader.dart';
+import 'package:flutter_application_1/LoginController.dart';
+import 'package:flutter_application_1/globals.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 class HomeController extends StatefulWidget {
@@ -28,6 +34,16 @@ class _HomeControllerState extends State<HomeController> {
               child: Text("Redditech"),
             ),
           ],
+        ),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            inspect(redditech);
+            suprCreditentials();
+            Navigator.popAndPushNamed(context, '/login');
+          },
+          child: const Text("logout"),
         ),
       ),
     );

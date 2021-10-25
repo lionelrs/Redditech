@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:draw/draw.dart';
-import 'package:flutter_application_1/Creditential_loader.dart';
+import 'package:flutter_application_1/HomeController.dart';
 import 'package:flutter_application_1/globals.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
+
+import 'CreditentialLoader.dart';
 
 class LoginController extends StatefulWidget {
   LoginController({Key? key, required this.title}) : super(key: key);
@@ -27,35 +31,32 @@ class _LoginControllerState extends State<LoginController> {
     final userAgent = 'foobavegeaebaevrvvrvevvzvzr';
     final creditential = await loadCreditentials();
     var reddit;
+    print(creditential);
 
-    if (creditential == "null") {
-      reddit = Reddit.createInstalledFlowInstance(
-          userAgent: userAgent,
-          redirectUri: Uri.parse("antonin://fille"),
-          clientId: "N2MjyDzaWV2eKc9m9pGHbw");
+    reddit = Reddit.createInstalledFlowInstance(
+        userAgent: userAgent,
+        redirectUri: Uri.parse("antonin://fille"),
+        clientId: "N2MjyDzaWV2eKc9m9pGHbw");
 
-      final authUrl = reddit.auth.url(['*'], userAgent, compactLogin: true);
+    final authUrl = reddit.auth.url(['*'], userAgent, compactLogin: true);
 
-      try {
-        final result = await FlutterWebAuth.authenticate(
-          url: authUrl.toString(),
-          callbackUrlScheme: "antonin",
-        );
+    try {
+      final result = await FlutterWebAuth.authenticate(
+        url: authUrl.toString(),
+        callbackUrlScheme: "antonin",
+      );
 
-        final code = Uri.parse(result).queryParameters['code'];
+      final code = Uri.parse(result).queryParameters['code'];
 
-        await reddit.auth.authorize(code!);
-        redditech = reddit;
-        saveCreditentials(reddit);
-      } catch (e) {
-        print("erreur");
-        return;
-      }
-    } else {
-      redditech = Reddit.restoreAuthenticatedInstance(creditential);
+      await reddit.auth.authorize(code!);
+      redditech = reddit;
+      saveCreditentials(reddit);
+      Navigator.popAndPushNamed(context, '/home');
+    } catch (e) {
+      print("ERREUR" + e.toString());
+      return;
     }
-
-    print(reddit.user.me());
+    inspect(redditech!.user.me());
   }
 
 //   void _authentificate() {
