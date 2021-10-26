@@ -65,6 +65,7 @@ Future<Widget> isAuth() async {
       clientId: "N2MjyDzaWV2eKc9m9pGHbw",
       userAgent: 'foobavegeaebaevrvvrvevvzvzr',
     );
+    redditor = await redditech!.user.me();
     return HomeController();
   }
 }
