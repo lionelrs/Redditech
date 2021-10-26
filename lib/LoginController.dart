@@ -50,13 +50,13 @@ class _LoginControllerState extends State<LoginController> {
 
       await reddit.auth.authorize(code!);
       redditech = reddit;
+      redditor = await redditech!.user.me();
       saveCreditentials(reddit);
       Navigator.popAndPushNamed(context, '/home');
     } catch (e) {
       print("ERREUR" + e.toString());
       return;
     }
-    inspect(redditech!.user.me());
   }
 
 //   void _authentificate() {

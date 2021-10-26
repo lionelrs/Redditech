@@ -19,14 +19,3 @@ AppBar applicationBar() {
     ),
   );
 }
-
-BottomNavigationBar bottomNavigationBar() {
-  return BottomNavigationBar(
-    items: <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        label: 'Home',
-      ),
-    ],
-  );
-}

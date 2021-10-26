@@ -22,6 +22,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'verdana',
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: myColor,
+          accentColor: Color(0xFFC6C6C6),
+          primaryColorDark: Color(0xFF222222),
         ),
         primaryTextTheme: TextTheme(
             headline6: TextStyle(

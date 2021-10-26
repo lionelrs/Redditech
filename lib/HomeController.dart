@@ -1,8 +1,12 @@
 import 'dart:developer';
 
+import 'package:flutter_application_1/AccountContainer.dart';
+import 'package:flutter_application_1/HomeContainer.dart';
+import 'package:flutter_application_1/MessageContainer.dart';
+
+import 'BottomNavigation.dart';
 import 'commonWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:draw/draw.dart';
 import 'package:flutter_application_1/CreditentialLoader.dart';
 import 'package:flutter_application_1/LoginController.dart';
 import 'package:flutter_application_1/globals.dart';
@@ -36,16 +40,33 @@ class _HomeControllerState extends State<HomeController> {
           ],
         ),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            inspect(redditech);
-            suprCreditentials();
-            Navigator.popAndPushNamed(context, '/login');
-          },
-          child: const Text("logout"),
+      body: DefaultTabController(
+        length: 4,
+        child: Scaffold(
+          bottomNavigationBar: BottomNavigation(),
+          body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              HomeContainer(),
+              MessageContainer(),
+              Container(child: Icon(Icons.directions_bike)),
+              AccountContainer(),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+
+// Center(
+//         child: ElevatedButton(
+//           onPressed: () {
+//             inspect(redditech);
+//             suprCreditentials();
+//             Navigator.popAndPushNamed(context, '/login');
+//           },
+//           child: const Text("logout"),
+//         ),
+//       ),
