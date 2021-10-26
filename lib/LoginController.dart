@@ -91,7 +91,7 @@ class _LoginControllerState extends State<LoginController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Sing in"),
+                      Text("Sign in"),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Icon(Icons.login),
