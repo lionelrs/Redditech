@@ -157,7 +157,7 @@ class UserInfo extends StatelessWidget {
             children: <Widget> [
               Center(
                 child: Transform.translate(
-                  offset: const Offset(0.0, 45.0),
+                  offset: Offset(0.0, MediaQuery.of(context).size.height / 15),
                   child: Container(
                     margin: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
@@ -165,13 +165,13 @@ class UserInfo extends StatelessWidget {
                       color: Color(0xffdfdcdb),
                     ),
                     width: MediaQuery.of(context).size.width - 70,
-                    height: MediaQuery.of(context).size.width - 140,
+                    height: MediaQuery.of(context).size.width - 120,
                   )
                 ),
               ),
               Center(
                 child: Transform.translate(
-                offset: const Offset(0.0, 0.0),
+                offset: Offset(0.0, MediaQuery.of(context).size.height / 100),
                   child: Container(
                     child: Image.network(
                       redditor!.data!["snoovatar_img"],
@@ -184,7 +184,7 @@ class UserInfo extends StatelessWidget {
               ),
               Center(
                 child: Transform.translate(
-                  offset: Offset(0.0, 210.0),
+                  offset: Offset(0.0, MediaQuery.of(context).size.height / 3.7),
                   child: Container(
                     child: Text(
                       redditor!.data!['subreddit']['display_name_prefixed'],
@@ -197,7 +197,7 @@ class UserInfo extends StatelessWidget {
               ),
               Center(
                 child: Transform.translate(
-                  offset: Offset(0.0, 235.0),
+                  offset: Offset(0.0,MediaQuery.of(context).size.height / 3.2),
                   child: Container(
                     child: Text(
                       redditor!.data!['subreddit']['public_description'],
@@ -210,15 +210,15 @@ class UserInfo extends StatelessWidget {
               ),
               Center(
                 child: Transform.translate(
-                  offset: Offset(0.0, 260.0),
+                  offset: Offset(0.0, MediaQuery.of(context).size.height / 2.85),
                   child: Container(
                     padding: const EdgeInsets.all(5.0),
                     decoration: BoxDecoration(
                       border: Border(
-                        top: BorderSide(width: 1.0, color: Colors.greenAccent),
-                        left: BorderSide(width: 1.0, color: Colors.greenAccent),
-                        right: BorderSide(width: 1.0, color: Colors.greenAccent),
-                        bottom: BorderSide(width: 1.0, color: Colors.greenAccent),
+                        top: BorderSide(width: 1.0, color: Colors.green),
+                        left: BorderSide(width: 1.0, color: Colors.green),
+                        right: BorderSide(width: 1.0, color: Colors.green),
+                        bottom: BorderSide(width: 1.0, color: Colors.green),
                       ),
                       borderRadius: BorderRadius.circular(20),
                       color: Color(0xffdfdcdb),
@@ -227,7 +227,7 @@ class UserInfo extends StatelessWidget {
                       "Online Status: On",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.greenAccent,
+                        color: Colors.green,
                       ),
                     ),
                   ),
