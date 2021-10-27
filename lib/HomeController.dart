@@ -35,7 +35,13 @@ class _HomeControllerState extends State<HomeController> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text("Redditech"),
+              child: Text(
+                "Redditech",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
             ),
           ],
         ),
