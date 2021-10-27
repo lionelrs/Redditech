@@ -9,9 +9,13 @@ class HomeContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CommunitiesWidget(),
+    return ListView(
+      children: <Widget>[
+        Column(
+          children: [
+            CommunitiesWidget(),
+          ],
+        ),
       ],
     );
   }
@@ -24,45 +28,110 @@ class CommunitiesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     inspect(redditor);
     // redditor!.
-    return SizedBox(
-      height: 60,
-      child: //Center(child: Text("test")),
-          FutureBuilder(
-        future: fillCommunities(),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<SubredditRef>> list) {
-          if (list.connectionState == ConnectionState.done) {
-            if (!list.hasData) {
-              return Center(child: Text("null"));
-            }
-            return ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: list.data!.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: 100,
-                  child: Column(
-                    children: [
-                      Text('r/' + list.data![index].displayName),
-                    ],
-                  ),
-                );
-              },
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+    return Container(
+      height: 200,
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0, left: 20.0),
+            child: Text(
+              "Communities",
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textScaleFactor: 1.0,
+              textAlign: TextAlign.left,
+            ),
+          ),
+          Expanded(
+            child: ComunitiIconeName(),
+          ),
+        ],
       ),
+    );
+  }
+}
+
+class ComunitiIconeName extends StatelessWidget {
+  const ComunitiIconeName({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: fillCommunities(),
+      builder: (BuildContext context, AsyncSnapshot<List<SubredditRef>> list) {
+        if (list.connectionState == ConnectionState.done) {
+          if (!list.hasData) {
+            return Center(child: Text("null"));
+          }
+          return ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: list.data!.length,
+            itemBuilder: (context, index) {
+              Subreddit subred = list.data![index] as Subreddit;
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    print("NULLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+                  },
+                  child: Container(
+                    width: 150,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondary
+                                      .withOpacity(0.8),
+                                  spreadRadius: 2,
+                                  blurRadius: 6,
+                                  offset: Offset(0, 7),
+                                )
+                              ],
+                            ),
+                            child: CircleAvatar(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              radius: 50,
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                foregroundImage:
+                                    NetworkImage(subred.iconImage.toString()),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Text('r/' + subred.displayName),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }
 
 Future<List<SubredditRef>> fillCommunities() async {
   List<Widget> commu = [];
-  final data = redditech!.subreddits.popular(limit: 20);
+  final data = redditech!.user.subreddits(limit: 20);
   final result = await data.toList();
 
   inspect(result);
