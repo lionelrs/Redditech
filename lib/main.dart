@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
 Future<Widget> isAuth() async {
   final creditential = await loadCreditentials();
 
-  if (creditential == "null") {
+  if (creditential != null) {
     return LoginController(title: "login");
   } else {
     redditech = Reddit.restoreAuthenticatedInstance(
