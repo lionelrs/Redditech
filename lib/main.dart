@@ -7,6 +7,7 @@ import 'globals.dart';
 import 'LoginController.dart';
 import 'HomeController.dart';
 import 'CreditentialLoader.dart';
+import 'PostDisplayController.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
             ),
         '/home': (context) => HomeController(),
         '/login': (context) => LoginController(title: 'red'),
+        '/postSubreddit': (context) => PostDisplayController(),
       },
     );
   }

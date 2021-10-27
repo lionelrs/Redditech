@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/PostDisplayController.dart';
 import 'package:flutter_application_1/globals.dart';
 import 'package:draw/draw.dart';
 
@@ -73,7 +74,8 @@ class ComunitiIconeName extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () {
-                    print("NULLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+                    Navigator.pushNamed(context, '/postSubreddit',
+                        arguments: PostArguments(subred));
                   },
                   child: Container(
                     width: 150,
