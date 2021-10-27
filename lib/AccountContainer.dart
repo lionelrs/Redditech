@@ -10,13 +10,94 @@ class AccountContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     inspect(redditor);
     return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          UserInfo(),
-          KarmaAndCake(),
-          LogoutButton(),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            UserInfo(),
+            KarmaAndCake(),
+            Coins(),
+            Premium(),
+            LogoutButton(),
+            Container(height: MediaQuery.of(context).size.height / 5,)
+          ],
+        ),
+      ),
+      
+    );
+  }
+}
+
+class Premium extends StatelessWidget {
+  const Premium({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.translate(
+      offset: Offset(MediaQuery.of(context).size.width / 10, MediaQuery.of(context).size.height / 12),
+      child: Container(
+        padding: const EdgeInsets.only(left: 4),
+        child: Row(
+          children: [
+            Image.asset(
+              'assets/images/Premium.png',
+              fit: BoxFit.contain,
+              height: MediaQuery.of(context).size.height / 30,
+            ),
+            Container(
+              padding: const EdgeInsets.all(14.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Reddit Premium",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Ads-free browsing"
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      )
+    );
+  }
+}
+
+class Coins extends StatelessWidget {
+  const Coins({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.translate(
+      offset: Offset(MediaQuery.of(context).size.width / 10, MediaQuery.of(context).size.height / 12),
+      child: Row(
+        children: [
+          Image.asset(
+            'assets/images/Coin.png',
+            fit: BoxFit.contain,
+            height: MediaQuery.of(context).size.height / 30,
+          ),
+          Container(
+            padding: const EdgeInsets.all(14.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Reddit Coins",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  redditor!.data!["coins"].toString() + " Coins"
+                ),
+              ],
+            ),
+          )
         ],
       )
     );
@@ -29,7 +110,7 @@ class LogoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Transform.translate(
-            offset: Offset(0.0, 100.0),
+            offset: Offset(0.0, MediaQuery.of(context).size.height / 10),
             child: ElevatedButton(
               onPressed: () {
                 Navigator.popAndPushNamed(context, '/login');
@@ -46,7 +127,7 @@ class KarmaAndCake extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Transform.translate(
-            offset: Offset(0.0, 50.0),
+            offset: Offset(0.0, MediaQuery.of(context).size.height / 12),
             child: IntrinsicHeight(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
