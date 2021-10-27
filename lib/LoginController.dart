@@ -40,6 +40,8 @@ class _LoginControllerState extends State<LoginController> {
 
     final authUrl = reddit.auth.url(['*'], userAgent, compactLogin: true);
 
+    print(authUrl.toString());
+
     try {
       final result = await FlutterWebAuth.authenticate(
         url: authUrl.toString(),
