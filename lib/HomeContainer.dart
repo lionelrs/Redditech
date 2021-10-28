@@ -27,10 +27,9 @@ class CommunitiesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    inspect(redditor);
     // redditor!.
     return Container(
-      height: 200,
+      height: 190,
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,6 +46,9 @@ class CommunitiesWidget extends StatelessWidget {
           Expanded(
             child: ComunitiIconeName(),
           ),
+          Divider(
+            height: 1,
+          )
         ],
       ),
     );
@@ -80,7 +82,7 @@ class ComunitiIconeName extends StatelessWidget {
                   child: Container(
                     width: 150,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -102,18 +104,23 @@ class ComunitiIconeName extends StatelessWidget {
                             child: CircleAvatar(
                               backgroundColor:
                                   Theme.of(context).colorScheme.primary,
-                              radius: 50,
+                              radius: 30,
                               child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
+                                radius: 20,
+                                backgroundColor: Colors.transparent,
                                 foregroundImage:
                                     NetworkImage(subred.iconImage.toString()),
+                                onForegroundImageError: (test, err) {},
                               ),
                             ),
                           ),
                         ),
-                        Text('r/' + subred.displayName),
+                        Container(
+                          child: Text(
+                            'r/' + subred.displayName,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -135,8 +142,6 @@ Future<List<SubredditRef>> fillCommunities() async {
   List<Widget> commu = [];
   final data = redditech!.user.subreddits(limit: 20);
   final result = await data.toList();
-
-  inspect(result);
 
   return result;
 }

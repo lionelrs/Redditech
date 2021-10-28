@@ -31,6 +31,8 @@ class MyApp extends StatelessWidget {
                 color: Colors.black, fontFamily: 'verdana-bold', fontSize: 20)),
         textTheme: const TextTheme(
           bodyText2: TextStyle(color: Colors.black),
+          caption: TextStyle(
+              color: Color(0xFFA5A4A4), fontFamily: 'verdana', fontSize: 10),
         ),
       ),
       initialRoute: '/',
