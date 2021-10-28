@@ -7,8 +7,13 @@ import 'package:draw/draw.dart';
 
 class InfiniteList extends StatefulWidget {
   const InfiniteList(
-      {Key? key, required this.listInfos, required this.tileConstruct})
+      {Key? key,
+      required this.listInfos,
+      required this.tileConstruct,
+      required this.title})
       : super(key: key);
+
+  final String title;
 
   final Future<List<dynamic>> Function(int limit, String? afterFullname)
       listInfos;
@@ -64,7 +69,7 @@ class _InfiniteListState extends State<InfiniteList> {
     if (!mounted) return;
     setState(() {
       if (result.isNotEmpty && upDownState == 2) {
-        last = result[19].fullname;
+        last = result[result.length - 1].fullname;
       }
       loading = false;
       allLoaded = result.isEmpty;
@@ -109,8 +114,18 @@ class _InfiniteListState extends State<InfiniteList> {
               children: [
                 ListView.separated(
                   controller: _scrollController,
-                  itemCount: comments.length,
+                  itemCount: widget.title == ""
+                      ? comments.length + 1
+                      : comments.length,
                   separatorBuilder: (BuildContext context, int index) {
+                    if (index == 0 && widget.title != "") {
+                      // return the header
+                      return HeaderList(title: widget.title);
+                    } else if (widget.title == "") {
+                      index += 1;
+                    }
+                    index -= 1;
+
                     return widget.tileConstruct(comments[index]);
                   },
                   itemBuilder: (BuildContext context, int index) {
@@ -138,6 +153,27 @@ class _InfiniteListState extends State<InfiniteList> {
             );
           }
         },
+      ),
+    );
+  }
+}
+
+class HeaderList extends StatelessWidget {
+  const HeaderList({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        child: Text(
+          title,
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, shadows: [
+            Shadow(blurRadius: 2, color: Theme.of(context).colorScheme.primary)
+          ]),
+        ),
       ),
     );
   }

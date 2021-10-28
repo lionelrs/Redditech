@@ -5,6 +5,8 @@ import 'package:flutter_application_1/PostDisplayController.dart';
 import 'package:flutter_application_1/globals.dart';
 import 'package:draw/draw.dart';
 
+import 'FeedWidget.dart';
+
 class HomeContainer extends StatelessWidget {
   const HomeContainer({Key? key}) : super(key: key);
 
@@ -12,11 +14,8 @@ class HomeContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        Column(
-          children: [
-            CommunitiesWidget(),
-          ],
-        ),
+        CommunitiesWidget(),
+        FeedWidget(),
       ],
     );
   }
@@ -29,8 +28,18 @@ class CommunitiesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // redditor!.
     return Container(
-      height: 190,
+      height: 170,
       width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.secondary,
+            spreadRadius: 2,
+            blurRadius: 3,
+          )
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,9 +54,6 @@ class CommunitiesWidget extends StatelessWidget {
           ),
           Expanded(
             child: ComunitiIconeName(),
-          ),
-          Divider(
-            height: 1,
           )
         ],
       ),

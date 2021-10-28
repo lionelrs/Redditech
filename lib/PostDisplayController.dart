@@ -76,7 +76,11 @@ class _PostDisplayControllerState extends State<PostDisplayController> {
               sub: args.sub,
               callback: callBack,
             ),
-            InfiniteList(listInfos: listSub, tileConstruct: postCreator),
+            InfiniteList(
+              listInfos: listSub,
+              tileConstruct: postCreator,
+              title: "",
+            ),
           ],
         ));
   }
