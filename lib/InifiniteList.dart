@@ -35,7 +35,6 @@ class _InfiniteListState extends State<InfiniteList> {
   @override
   void didUpdateWidget(dynamic oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print("test");
     comments = [];
     last = null;
     fetchCom();
@@ -53,10 +52,8 @@ class _InfiniteListState extends State<InfiniteList> {
       loading = true;
     });
     if (upDownState == 2) {
-      print("test1");
       result = await widget.listInfos(20, last);
       if (result.isNotEmpty) {
-        print("test1");
         comments.addAll(result);
       }
     } else {
@@ -169,9 +166,11 @@ class HeaderList extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         child: Text(
-          title,
-          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, shadows: [
-            Shadow(blurRadius: 2, color: Theme.of(context).colorScheme.primary)
+          "search for \"" + title + "\"",
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, shadows: [
+            Shadow(
+                blurRadius: 1,
+                color: Theme.of(context).colorScheme.primaryVariant)
           ]),
         ),
       ),

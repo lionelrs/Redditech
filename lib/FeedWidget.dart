@@ -11,23 +11,52 @@ class HeaderList {
 }
 
 class FeedWidget extends StatefulWidget {
-  const FeedWidget({Key? key}) : super(key: key);
+  const FeedWidget({Key? key, required this.callBackCommunities})
+      : super(key: key);
+
+  final void Function() callBackCommunities;
 
   @override
   _FeedWidgetState createState() => _FeedWidgetState();
 }
 
 class _FeedWidgetState extends State<FeedWidget> {
-  String search = "Popular";
+  String _search = "";
+
+  void didUpdateWidget(dynamic oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _search = globalSearch;
+  }
+
+  void refreshCommunities() {
+    widget.callBackCommunities();
+  }
 
   Widget constructWidget(dynamic subreddit) {
-    return TileSubreddit(subredd: subreddit);
+    return TileSubreddit(
+      subredd: subreddit,
+      returnFromPage: refreshCommunities,
+    );
+  }
+
+  void callBack(String search) {
+    if (!mounted) return;
+    setState(() {
+      _search = search;
+      print("ttest");
+    });
   }
 
   Future<List<dynamic>> listSub(int limite, String? atferFullName) async {
     List<Subreddit> displayList = [];
-    List<SubredditRef> tmp = await redditech!.subreddits.popular(
-        limit: limite, params: {"after": atferFullName ?? ""}).toList();
+    List<SubredditRef> tmp = [];
+    if (_search == "") {
+      tmp = await redditech!.subreddits.popular(
+          limit: limite, params: {"after": atferFullName ?? ""}).toList();
+    } else {
+      tmp = await redditech!.subreddits.search(_search,
+          limit: limite, params: {"after": atferFullName ?? ""}).toList();
+    }
 
     tmp.forEach((element) {
       displayList.add(element as Subreddit);
@@ -43,7 +72,7 @@ class _FeedWidgetState extends State<FeedWidget> {
         InfiniteList(
           listInfos: listSub,
           tileConstruct: constructWidget,
-          title: search,
+          title: _search,
         ),
       ],
     );
@@ -51,9 +80,12 @@ class _FeedWidgetState extends State<FeedWidget> {
 }
 
 class TileSubreddit extends StatelessWidget {
-  const TileSubreddit({Key? key, required this.subredd}) : super(key: key);
+  const TileSubreddit(
+      {Key? key, required this.subredd, required this.returnFromPage})
+      : super(key: key);
 
   final Subreddit subredd;
+  final void Function() returnFromPage;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +95,7 @@ class TileSubreddit extends StatelessWidget {
           context,
           '/postSubreddit',
           arguments: PostArguments(subredd),
-        );
+        ).then((value) => returnFromPage());
       },
       child: Card(
         child: Padding(
@@ -92,7 +124,7 @@ class TileSubreddit extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   width: 200,
-                  child: Text(subredd.title),
+                  child: Text(subredd.displayName),
                 ),
               ),
             ],

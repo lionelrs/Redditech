@@ -7,15 +7,82 @@ import 'package:draw/draw.dart';
 
 import 'FeedWidget.dart';
 
-class HomeContainer extends StatelessWidget {
+class HomeContainer extends StatefulWidget {
   const HomeContainer({Key? key}) : super(key: key);
 
   @override
+  _HomeContainerState createState() => _HomeContainerState();
+}
+
+class _HomeContainerState extends State<HomeContainer> {
+  String search = "";
+
+  void callBackCommunities() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
     return ListView(
       children: <Widget>[
         CommunitiesWidget(),
-        FeedWidget(),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.secondary,
+                spreadRadius: 0,
+                blurRadius: 1,
+                offset: Offset(0.0, 4),
+              )
+            ],
+          ),
+          child: Form(
+            key: _formKey,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {
+                        // Validate will return true if the form is valid, or false if
+                        // the form is invalid.
+                        if (_formKey.currentState!.validate()) {}
+                      }),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0, left: 8.0),
+                  child: Container(
+                    width: 250,
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'Search',
+                      ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        globalSearch = value;
+                        if (!mounted) return null;
+                        setState(() {});
+                        return null;
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        FeedWidget(
+          callBackCommunities: callBackCommunities,
+        ),
       ],
     );
   }
@@ -32,13 +99,6 @@ class CommunitiesWidget extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.secondary,
-            spreadRadius: 2,
-            blurRadius: 3,
-          )
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,9 +121,14 @@ class CommunitiesWidget extends StatelessWidget {
   }
 }
 
-class ComunitiIconeName extends StatelessWidget {
+class ComunitiIconeName extends StatefulWidget {
   const ComunitiIconeName({Key? key}) : super(key: key);
 
+  @override
+  _ComunitiIconeNameState createState() => _ComunitiIconeNameState();
+}
+
+class _ComunitiIconeNameState extends State<ComunitiIconeName> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -83,7 +148,10 @@ class ComunitiIconeName extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, '/postSubreddit',
-                        arguments: PostArguments(subred));
+                            arguments: PostArguments(subred))
+                        .then((value) {
+                      setState(() {});
+                    });
                   },
                   child: Container(
                     width: 150,

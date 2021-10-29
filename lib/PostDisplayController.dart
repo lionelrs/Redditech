@@ -34,13 +34,10 @@ class _PostDisplayControllerState extends State<PostDisplayController> {
     List<UserContent> tmp = [];
 
     if (_filter == "hot") {
-      print("hot");
       tmp = await args.sub.hot(limit: limite, after: atferFullName).toList();
     } else if (_filter == "top") {
-      print("top");
       tmp = await args.sub.top(limit: limite, after: atferFullName).toList();
     } else {
-      print("newest");
       tmp = await args.sub.newest(limit: limite, after: atferFullName).toList();
     }
 
@@ -159,7 +156,7 @@ String k_m_b_generator(num) {
   }
 }
 
-class HeaderSubreddit extends StatelessWidget {
+class HeaderSubreddit extends StatefulWidget {
   const HeaderSubreddit({Key? key, required this.sub, required this.callback})
       : super(key: key);
 
@@ -167,33 +164,45 @@ class HeaderSubreddit extends StatelessWidget {
 
   final Subreddit sub;
 
-  Widget _offsetPopup() => PopupMenuButton<String>(
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            value: "newest",
-            child: Text(
-              "newest",
+  @override
+  _HeaderSubredditState createState() => _HeaderSubredditState();
+}
+
+class _HeaderSubredditState extends State<HeaderSubreddit> {
+  Widget _offsetPopup() {
+    return Column(
+      children: [
+        SubUnsubButton(sub: widget.sub),
+        PopupMenuButton<String>(
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: "newest",
+              child: Text(
+                "newest",
+              ),
             ),
-          ),
-          PopupMenuItem(
-            value: "top",
-            child: Text(
-              "top",
+            PopupMenuItem(
+              value: "top",
+              child: Text(
+                "top",
+              ),
             ),
-          ),
-          PopupMenuItem(
-            value: "hot",
-            child: Text(
-              "hot",
+            PopupMenuItem(
+              value: "hot",
+              child: Text(
+                "hot",
+              ),
             ),
-          ),
-        ],
-        onSelected: (value) {
-          callback(value);
-        },
-        icon: Icon(Icons.filter_list_alt),
-        offset: Offset(0, 50),
-      );
+          ],
+          onSelected: (value) {
+            widget.callback(value);
+          },
+          icon: Icon(Icons.filter_list),
+          offset: Offset(0, 50),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,14 +218,19 @@ class HeaderSubreddit extends StatelessWidget {
                 child: SizedBox(
                   height: 40,
                   width: 100,
-                  child: sub.headerImage.toString().contains("http")
-                      ? Image.network(sub.headerImage.toString())
+                  child: widget.sub.headerImage.toString().contains("http")
+                      ? Image.network(
+                          widget.sub.headerImage.toString(),
+                          errorBuilder: (test, cool, e) {
+                            return Container();
+                          },
+                        )
                       : Container(),
                 )),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                subIdentity(sub: sub),
+                SubIdentity(sub: widget.sub),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -232,12 +246,55 @@ class HeaderSubreddit extends StatelessWidget {
   }
 }
 
-class subIdentity extends StatelessWidget {
-  const subIdentity({Key? key, required this.sub}) : super(key: key);
+class SubUnsubButton extends StatefulWidget {
+  SubUnsubButton({Key? key, required this.sub}) : super(key: key);
 
   final Subreddit sub;
 
-  String MembersFormatString(String nbrSub) {
+  @override
+  _SubUnsubButtonState createState() => _SubUnsubButtonState();
+}
+
+class _SubUnsubButtonState extends State<SubUnsubButton> {
+  bool isSwitched = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isSwitched = widget.sub.data!["user_is_subscriber"] == true ? true : false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 50,
+      child: Switch(
+        value: isSwitched,
+        onChanged: (value) async {
+          if (value) {
+            await widget.sub.subscribe();
+            print("subscrube");
+          } else {
+            await widget.sub.unsubscribe();
+            print("unsubscrube");
+          }
+          setState(() {
+            isSwitched = value;
+          });
+        },
+        activeTrackColor: Colors.yellow,
+        activeColor: Colors.orangeAccent,
+      ),
+    );
+  }
+}
+
+class SubIdentity extends StatelessWidget {
+  const SubIdentity({Key? key, required this.sub}) : super(key: key);
+
+  final Subreddit sub;
+
+  String membersFormatString(String nbrSub) {
     String res = nbrSub.split('').reversed.join();
     res =
         res.replaceAllMapped(RegExp(r".{3}"), (match) => "${match.group(0)} ");
@@ -247,7 +304,6 @@ class subIdentity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GlobalKey key = GlobalKey();
-    print("SUBBBBBBBB");
     inspect(sub);
     return Container(
       child: Column(
@@ -258,7 +314,9 @@ class subIdentity extends StatelessWidget {
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(sub.iconImage.toString()),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundImage: NetworkImage(sub.iconImage.toString()),
+                    onForegroundImageError: (err, lol) {},
                   )),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -285,7 +343,7 @@ class subIdentity extends StatelessWidget {
             ],
           ),
           Text(
-            MembersFormatString(sub.data!["subscribers"].toString()) +
+            membersFormatString(sub.data!["subscribers"].toString()) +
                 " members ",
             style: TextStyle(
               fontSize: 10,
