@@ -37,6 +37,7 @@ class _InfiniteListState extends State<InfiniteList> {
     super.didUpdateWidget(oldWidget);
     comments = [];
     last = null;
+    allLoaded = false;
     fetchCom();
   }
 
@@ -70,6 +71,9 @@ class _InfiniteListState extends State<InfiniteList> {
       }
       loading = false;
       allLoaded = result.isEmpty;
+      if (result.isEmpty) {
+        print("bit");
+      }
     });
   }
 
@@ -144,9 +148,21 @@ class _InfiniteListState extends State<InfiniteList> {
                 ]
               ],
             );
+          } else if (allLoaded) {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              child: Center(
+                child: Text(
+                  "Sorry, no community was found for \"" + widget.title + "\"",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
           } else {
-            return Center(
-              child: CircularProgressIndicator(),
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
         },
