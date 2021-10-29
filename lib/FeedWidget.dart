@@ -43,7 +43,6 @@ class _FeedWidgetState extends State<FeedWidget> {
     if (!mounted) return;
     setState(() {
       _search = search;
-      print("ttest");
     });
   }
 

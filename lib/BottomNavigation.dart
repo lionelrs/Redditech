@@ -31,10 +31,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
             icon: Icon(Icons.home),
           ),
           Tab(
-            icon: Icon(Icons.message),
-          ),
-          Tab(
-            icon: Icon(Icons.notifications),
+            icon: Icon(Icons.settings_rounded),
           ),
           Tab(
             icon: Icon(Icons.person),

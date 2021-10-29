@@ -1,16 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter_application_1/AccountContainer.dart';
 import 'package:flutter_application_1/HomeContainer.dart';
-import 'package:flutter_application_1/MessageContainer.dart';
+import 'package:flutter_application_1/SettingsContainer.dart';
 
 import 'BottomNavigation.dart';
-import 'commonWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/CreditentialLoader.dart';
-import 'package:flutter_application_1/LoginController.dart';
-import 'package:flutter_application_1/globals.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 class HomeController extends StatefulWidget {
   HomeController({Key? key}) : super(key: key);
@@ -47,15 +40,14 @@ class _HomeControllerState extends State<HomeController> {
         ),
       ),
       body: DefaultTabController(
-        length: 4,
+        length: 3,
         child: Scaffold(
           bottomNavigationBar: BottomNavigation(),
           body: TabBarView(
             physics: NeverScrollableScrollPhysics(),
             children: [
               HomeContainer(),
-              MessageContainer(),
-              Container(child: Icon(Icons.directions_bike)),
+              SettingsContainer(),
               AccountContainer(),
             ],
           ),
