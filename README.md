@@ -1,4 +1,4 @@
-# flutter_application_1
+# Redditech
 
 A new Flutter project.
 
